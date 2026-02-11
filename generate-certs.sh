@@ -1,6 +1,4 @@
 #!/bin/bash
-
-#!/bin/bash
 set -e
 
 SERVICE_NAME="telltale"
@@ -39,7 +37,7 @@ openssl x509 -req -in "${CERTS_DIR}/tls.csr" -CA "${CERTS_DIR}/ca.crt" -CAkey "$
 # 3. Create Secrets directly
 echo "Creating TLS Secret..."
 # Ensure namespace exists (or create it manually first with: oc create ns telltale)
-kubectl create namespace ${NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -
+# kubectl create namespace ${NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -
 kubectl create secret tls ${SERVICE_NAME}-tls --cert="${CERTS_DIR}/tls.crt" --key="${CERTS_DIR}/tls.key" -n ${NAMESPACE} --dry-run=client -o yaml > k8s/${SERVICE_NAME}-tls.yaml
 
 # 4. Patch Webhook CA Bundle
