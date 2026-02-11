@@ -172,7 +172,3 @@ telltale/
 - Capabilities removed
 - Seccomp profile RuntimeDefault
 - TLS 1.2 minimum
-
-## License
-
-MIT
