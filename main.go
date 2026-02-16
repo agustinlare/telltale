@@ -62,6 +62,9 @@ type Config struct {
 	// TLS configuration
 	TLSCertFile string
 	TLSKeyFile  string
+
+	// Cluster Name
+	ClusterName string
 }
 
 func loadConfig() Config {
@@ -75,6 +78,9 @@ func loadConfig() Config {
 
 	return Config{
 		TransportType: transportType,
+
+		// Cluster Name
+		ClusterName: getEnv("CLUSTER_NAME", ""),
 
 		// SMTP config
 		SMTPHost:     getEnv("SMTP_HOST", "localhost"),
@@ -161,11 +167,13 @@ func sendWebhook(config Config, resourceType, resourceName, username string, gro
 	// Build the message content (compatible with Discord)
 	content := fmt.Sprintf(`🚨 **RESOURCE DELETED**
 
+**Cluster:** %s
 **Type:** %s
 **Name:** %s
 **Deleted by:** %s
 **Groups:** %s
 **Date/Time:** %s`,
+		config.ClusterName,
 		resourceType,
 		resourceName,
 		username,
@@ -224,6 +232,7 @@ func sendTeamsWebhook(config Config, resourceType, resourceName, username string
 				ActivitySubtitle: "OpenShift Notification",
 				Markdown:         true,
 				Facts: []TeamsFact{
+					{Name: "Cluster", Value: config.ClusterName},
 					{Name: "Resource Type", Value: resourceType},
 					{Name: "Name", Value: resourceName},
 					{Name: "Deleted by", Value: username},
@@ -257,13 +266,14 @@ func sendTeamsWebhook(config Config, resourceType, resourceName, username string
 
 // sendEmail sends an email notification about the deletion
 func sendEmail(config Config, resourceType, resourceName, username string, groups []string) error {
-	subject := fmt.Sprintf("🚨 [OpenShift] %s '%s' has been deleted", resourceType, resourceName)
+	subject := fmt.Sprintf("🚨 [%s] %s '%s' has been deleted", config.ClusterName, resourceType, resourceName)
 
 	body := fmt.Sprintf(`
 ================================================================================
                     RESOURCE DELETION NOTIFICATION
 ================================================================================
 
+Cluster:       %s
 Resource Type: %s
 Name:          %s
 Deleted by:    %s
@@ -274,6 +284,7 @@ Date/Time:     %s
 This is an automated message from TellTale Notification System.
 ================================================================================
 `,
+		config.ClusterName,
 		resourceType,
 		resourceName,
 		username,
