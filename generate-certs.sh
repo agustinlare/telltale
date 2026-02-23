@@ -2,7 +2,7 @@
 set -e
 
 SERVICE_NAME="telltale"
-NAMESPACE="dyc-back-tst"
+NAMESPACE="dyc-back-pro"
 CERTS_DIR="certs"
 mkdir -p "${CERTS_DIR}"
 

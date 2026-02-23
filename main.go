@@ -207,8 +207,8 @@ func sendWebhook(config Config, resourceType, resourceName, username string, gro
 		return fmt.Errorf("webhook returned status %d: %s", resp.StatusCode, string(body))
 	}
 
-	log.Printf("Webhook sent successfully to %s about deletion of %s '%s' by '%s'",
-		config.WebhookURL, resourceType, resourceName, username)
+	log.Printf("Webhook sent successfully (HTTP %d) to %s about deletion of %s '%s' by '%s'",
+		resp.StatusCode, config.WebhookURL, resourceType, resourceName, username)
 	return nil
 }
 
@@ -259,8 +259,8 @@ func sendTeamsWebhook(config Config, resourceType, resourceName, username string
 		return fmt.Errorf("teams webhook returned status %d: %s", resp.StatusCode, string(body))
 	}
 
-	log.Printf("Teams webhook sent successfully to %s about deletion of %s '%s' by '%s'",
-		config.WebhookURL, resourceType, resourceName, username)
+	log.Printf("Teams webhook sent successfully (HTTP %d) to %s about deletion of %s '%s' by '%s'",
+		resp.StatusCode, config.WebhookURL, resourceType, resourceName, username)
 	return nil
 }
 
