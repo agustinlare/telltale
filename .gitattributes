@@ -6,7 +6,6 @@
 #
 # The above will handle all files NOT found below
 #
-# Custom Santalucia
 .java-version text diff=astextplain
 
 # Documents

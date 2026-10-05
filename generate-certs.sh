@@ -1,12 +1,18 @@
 #!/bin/bash
 set -e
 
-SERVICE_NAME="telltale"
-NAMESPACE="dyc-back-pro"
+SERVICE_NAME="${SERVICE_NAME:-telltale}"
+NAMESPACE="${NAMESPACE:-telltale}"
 CERTS_DIR="certs"
-mkdir -p "${CERTS_DIR}"
+mkdir -p "${CERTS_DIR}" "k8s"
 
-echo "Generating TLS certificates for ${SERVICE_NAME}..."
+if [[ ! -f "k8s/validatingwebhook.yaml" ]]; then
+    echo "ERROR: k8s/validatingwebhook.yaml not found." >&2
+    echo "Create it first from the template in README.md (section 'Kubernetes manifests')." >&2
+    exit 1
+fi
+
+echo "Generating TLS certificates for ${SERVICE_NAME} (namespace: ${NAMESPACE})..."
 
 # 1. Generate CA
 openssl genrsa -out "${CERTS_DIR}/ca.key" 2048

@@ -1,4 +1,4 @@
-module github.com/sopra/telltale
+module github.com/agustinlare/telltale
 
 go 1.23.0
 
